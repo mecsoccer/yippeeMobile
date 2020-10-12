@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, AsyncStorage, Alert, Image } from 'react-native';
 import { Text, Input, Button, CheckBox } from 'react-native-elements';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -28,10 +28,8 @@ const Login = ({ navigation }: PropsObject) => {
   }, [formValues]);
 
   function handleFormInput(name: string, value: string, regEx: RegExp) {
-    const formTemp = {...formValues};
-
-    formTemp[name] = { value, validation: regEx.test(value) ? true : false };
-    if (name === 'agreement') formTemp[name] = { value, validation: true };
+    const validation = regEx.test(value) ? true : false;
+    const formTemp = { ...formValues, [name]: { value, validation } };
 
     setFormValues(formTemp);
   }
@@ -68,6 +66,12 @@ const Login = ({ navigation }: PropsObject) => {
 
   return (
     <ScrollView style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate('Index')}>
+        <Image
+          style={{width:100,height:50,marginTop:20,marginBottom:40}}
+          source={require('../assets/images/yippee2.png')}
+        />
+      </TouchableOpacity>
       <Spacer>
         <Text h3 style={styles.pageTitle}>Signin to Yippee</Text>
       </Spacer>
@@ -125,6 +129,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   pageTitle: {
+    textAlign: 'center',
     marginBottom: 20,
   },
 });

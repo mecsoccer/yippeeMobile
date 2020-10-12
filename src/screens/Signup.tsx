@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet, ScrollView, Linking, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Linking, Alert, TouchableOpacity, Image } from 'react-native';
 import { Text, Input, Button, CheckBox } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Spacer from '../components/Spacer';
@@ -38,9 +39,9 @@ const Signup = ({ navigation }: PropsObject) => {
   }, [formValues]);
 
   function handleFormInput(name: string, value: string, regEx: RegExp) {
-    const formTemp = {...formValues};
+    const validation = regEx.test(value) ? true : false;
+    let formTemp = { ...formValues, [name]: { value, validation } };
 
-    formTemp[name] = { value, validation: regEx.test(value) ? true : false };
     if (name === 'agreement') formTemp[name] = { value, validation: true };
 
     setFormValues(formTemp);
@@ -85,6 +86,19 @@ const Signup = ({ navigation }: PropsObject) => {
   
   return (
     <ScrollView style={styles.container}>
+      <NavigationEvents
+        onWillFocus={() => { console.log('yo') }}
+        onDidFocus={() => { console.log('focused') }}
+        onWillBlur={() => { console.log('will blur') }}
+        onDidBlur={() => { console.log('did blur') }}
+      />
+      
+      <TouchableOpacity onPress={() => navigation.navigate('Index')}>
+        <Image
+          style={{width:100,height:50,marginTop:20, marginBottom:40}}
+          source={require('../assets/images/yippee2.png')}
+        />
+      </TouchableOpacity>
       <Spacer>
         <Text h3 style={styles.pageTitle}>Signup for Yippee</Text>
       </Spacer>
@@ -236,6 +250,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   pageTitle: {
+    textAlign: 'center',
     marginBottom: 20,
   },
   loginLink: {
